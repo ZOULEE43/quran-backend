@@ -1,0 +1,6 @@
+[phases.setup]
+# Install ffmpeg and fonts at build time so they're baked into the container
+nixPkgs = ["ffmpeg", "dejavu_fonts", "liberation_ttf"]
+
+[start]
+cmd = "gunicorn -w 2 -b 0.0.0.0:3000 --timeout 600 --keep-alive 5 backend:app"

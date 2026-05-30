@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+outputs/
+audio/
+*.mp4
+*.mp3
+ffmpeg_bin/ffmpeg.exe
+ffmpeg_bin/ffprobe.exe
+ffmpeg.exe
+ffprobe.exe
+.env

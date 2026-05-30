@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولّد ريلز قرآنية</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a227; --gold-l: #f0d060; --gold-d: #8a6f1a;
+  --deep: #060d1f; --surf: #0d1a35; --surf2: #132040; --surf3: #1a2a52;
+  --bdr:  rgba(201,162,39,.22); --bdr-b: rgba(201,162,39,.55);
+  --txt:  #e8dfc4; --dim: #9a9070;
+  --grn:  #2ecc71; --red: #e74c3c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--deep);color:var(--txt);font-family:'Cairo',sans-serif;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 50% at 50% -5%,rgba(201,162,39,.1) 0%,transparent 65%)}
+
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:28px 18px 60px}
+
+header{text-align:center;padding:36px 0 30px;border-bottom:1px solid var(--bdr);margin-bottom:32px}
+.star{font-size:44px;display:block;margin-bottom:6px;
+  filter:drop-shadow(0 0 16px var(--gold));animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 10px var(--gold))}
+  50%{filter:drop-shadow(0 0 26px var(--gold-l))}}
+h1{font-family:'Amiri',serif;font-size:clamp(22px,5vw,38px);color:var(--gold);
+  text-shadow:0 0 40px rgba(201,162,39,.35);line-height:1.3}
+.sub{color:var(--dim);font-size:13px;margin-top:8px;font-weight:300}
+
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:16px;
+  padding:24px 26px;margin-bottom:18px;transition:.3s}
+.card:hover{border-color:var(--bdr-b)}
+.ctitle{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.ctitle::before{content:'';display:block;width:3px;height:14px;
+  background:var(--gold);border-radius:2px}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:580px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}}
+
+.field{display:flex;flex-direction:column;gap:7px}
+label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);font-weight:600}
+select,input[type=number]{background:var(--surf2);border:1px solid var(--bdr);
+  border-radius:10px;color:var(--txt);font-family:'Cairo',sans-serif;font-size:14px;
+  padding:11px 14px;outline:none;transition:.25s;width:100%;direction:rtl}
+select:focus,input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.12)}
+select option{background:var(--surf3)}
+
+.theme-btn{background:var(--surf2);border:2px solid var(--bdr);border-radius:10px;
+  color:var(--dim);cursor:pointer;font-family:'Cairo',sans-serif;font-size:11px;
+  padding:10px 6px;transition:.2s;text-align:center;line-height:1.5}
+.theme-btn:hover{border-color:var(--gold-d);color:var(--txt)}
+.theme-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,162,39,.1)}
+.theme-btn .ico{font-size:22px;display:block;margin-bottom:3px}
+
+.cpill{flex:1;min-width:70px;padding:9px 6px;border-radius:10px;
+  border:2px solid var(--bdr);background:var(--surf2);cursor:pointer;
+  text-align:center;font-size:11px;font-family:'Cairo',sans-serif;color:var(--dim);transition:.2s}
+.cpill:hover{border-color:var(--gold-d);color:var(--txt)}
+.cpill.active{border-color:var(--gold);color:var(--gold);background:rgba(201,162,39,.1)}
+.cpill .ico{display:block;font-size:20px;margin-bottom:3px}
+
+#preview-box{background:linear-gradient(135deg,#0d1a35,#1a2a52);
+  border:1px solid var(--bdr);border-radius:14px;min-height:140px;
+  padding:26px 22px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;gap:12px;position:relative;overflow:hidden}
+#preview-box::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,162,39,.07),transparent 70%)}
+#ayah-preview{font-family:'Amiri',serif;font-size:clamp(18px,3.5vw,28px);
+  line-height:2.1;color:#fff;text-shadow:0 0 20px rgba(201,162,39,.2);position:relative;z-index:1}
+#surah-info{font-size:12px;color:var(--gold);letter-spacing:1px;position:relative;z-index:1}
+
+/* Check bar */
+.check-bar{display:flex;align-items:center;gap:8px;background:var(--surf2);
+  border:1px solid var(--bdr);border-radius:10px;padding:10px 14px;
+  margin-bottom:14px;font-size:12px;flex-wrap:wrap}
+.check-item{display:flex;align-items:center;gap:5px;padding:3px 8px;
+  border-radius:6px;background:rgba(255,255,255,.04)}
+
+/* Arabic install warning */
+.ar-warn{display:none;background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.3);
+  border-radius:10px;padding:11px 16px;margin-bottom:14px;font-size:13px;
+  align-items:center;gap:12px;flex-wrap:wrap}
+
+/* Generate button */
+#btn-gen{width:100%;padding:17px;
+  background:linear-gradient(135deg,#8a6f1a,#c9a227,#f0d060,#c9a227,#8a6f1a);
+  background-size:200% 100%;border:none;border-radius:13px;color:#060d1f;
+  font-family:'Cairo',sans-serif;font-size:16px;font-weight:700;cursor:pointer;
+  letter-spacing:2px;transition:.4s;box-shadow:0 4px 22px rgba(201,162,39,.28)}
+#btn-gen:hover{background-position:100% 0;transform:translateY(-1px);
+  box-shadow:0 6px 32px rgba(201,162,39,.45)}
+#btn-gen:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Progress */
+#prog-wrap{display:none;margin-top:18px}
+.prog-track{background:var(--surf2);border-radius:999px;height:8px;overflow:hidden;margin:8px 0}
+#prog-fill{height:100%;border-radius:999px;width:0%;transition:width .4s;
+  background:linear-gradient(90deg,var(--gold-d),var(--gold),var(--gold-l));
+  background-size:200%;animation:sh 2s linear infinite}
+@keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
+#prog-pct{font-size:22px;font-weight:700;color:var(--gold);text-align:center;display:block}
+#prog-msg{font-size:12px;color:var(--dim);text-align:center;margin-top:4px}
+
+/* Alerts */
+.alert{border-radius:12px;padding:14px 18px;font-size:14px;
+  display:none;align-items:center;gap:10px;margin-top:14px}
+.alert.ok{background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.35);color:var(--grn)}
+.alert.err{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.35);color:var(--red)}
+
+#btn-dl{display:none;width:100%;padding:13px;margin-top:12px;background:transparent;
+  border:2px solid var(--grn);border-radius:11px;color:var(--grn);
+  font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:.25s}
+#btn-dl:hover{background:rgba(46,204,113,.1)}
+
+.spin{display:inline-block;width:15px;height:15px;border:2px solid rgba(201,162,39,.3);
+  border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.orn{text-align:center;margin-top:44px;color:var(--bdr);font-size:20px;letter-spacing:10px}
+
+/* Info badges */
+.badge{background:var(--surf2);border:1px solid var(--bdr);border-radius:8px;
+  padding:8px 14px;font-size:11px;color:var(--dim)}
+.badge strong{color:var(--txt)}
+</style>
+</head>
+<body>
+<script>
+// If opened as file://, show warning and redirect to Flask server
+if (window.location.protocol === 'file:') {
+  document.write(`
+    <div style="font-family:Cairo,sans-serif;text-align:center;padding:60px 20px;
+      background:#060d1f;color:#e8dfc4;min-height:100vh;display:flex;
+      flex-direction:column;align-items:center;justify-content:center;gap:20px">
+      <div style="font-size:50px">⚠️</div>
+      <h2 style="color:#c9a227;font-size:24px">افتح الملف من خلال الخادم</h2>
+      <p style="color:#9a9070;max-width:400px">
+        لا تفتح frontend.html مباشرة.<br>
+        بدلاً من ذلك، افتح المتصفح على:
+      </p>
+      <a href="http://localhost:5000" style="
+        background:#c9a227;color:#000;padding:14px 32px;
+        border-radius:10px;font-weight:700;font-size:16px;
+        text-decoration:none;display:inline-block">
+        🌐 http://localhost:5000
+      </a>
+      <p style="color:#9a9070;font-size:13px">
+        تأكد أن backend.py يعمل أولاً:<br>
+        <code style="background:#132040;padding:4px 10px;border-radius:6px">python backend.py</code>
+      </p>
+    </div>
+  `);
+  throw new Error('Redirecting to Flask server');
+}
+</script>
+<div class="wrap">
+
+<header>
+  <span class="star">☪</span>
+  <h1>مولّد ريلز قرآنية</h1>
+  <p class="sub">فيديوهات قرآنية احترافية بخلفيات فيديو طبيعية وتأثيرات سينمائية</p>
+</header>
+
+<!-- Card 1: Reciter + Surah -->
+<div class="card">
+  <div class="ctitle">الاختيار القرآني</div>
+  <div class="field" style="margin-bottom:16px">
+    <label>القارئ</label>
+    <select id="sel-reciter"><option>⏳ جاري تحميل القراء...</option></select>
+  </div>
+  <div class="g2">
+    <div class="field">
+      <label>السورة الكريمة</label>
+      <select id="sel-surah"><option>⏳ جاري تحميل السور...</option></select>
+    </div>
+    <div class="field">
+      <label>عدد الآيات</label>
+      <select id="sel-count" disabled><option>اختر السورة أولاً</option></select>
+    </div>
+  </div>
+  <div class="g2" style="margin-top:14px">
+    <div class="field"><label>من الآية</label>
+      <input type="number" id="inp-from" min="1" value="1" disabled></div>
+    <div class="field"><label>إلى الآية</label>
+      <input type="number" id="inp-to" min="1" value="3" disabled></div>
+  </div>
+</div>
+
+<!-- Card 2: Preview -->
+<div class="card">
+  <div class="ctitle">معاينة النص</div>
+  <div id="preview-box">
+    <div id="ayah-preview" style="color:var(--dim);font-size:17px">﴿ اختر سورة وآيات للمعاينة ﴾</div>
+    <div id="surah-info"></div>
+  </div>
+</div>
+
+<!-- Card 3: Background + Color -->
+<div class="card">
+  <div class="ctitle">الخلفية والتصميم</div>
+  <div class="g2" style="margin-bottom:18px">
+    <div class="field">
+      <label>نوع الخلفية</label>
+      <div class="g4" style="margin-top:5px" id="theme-grid">
+        <button class="theme-btn"        data-t="auto"      onclick="setTheme(this)"><span class="ico">🎬</span>تلقائي</button>
+        <button class="theme-btn"        data-t="city_night" onclick="setTheme(this)"><span class="ico">🌃</span>مدينة</button>
+        <button class="theme-btn"        data-t="stars"      onclick="setTheme(this)"><span class="ico">⭐</span>نجوم</button>
+        <button class="theme-btn"        data-t="foggy_forest" onclick="setTheme(this)"><span class="ico">🌫️</span>ضباب</button>
+        <button class="theme-btn"        data-t="ocean"      onclick="setTheme(this)"><span class="ico">🌊</span>بحر</button>
+        <button class="theme-btn"        data-t="clouds"     onclick="setTheme(this)"><span class="ico">☁️</span>سحب</button>
+        <button class="theme-btn"        data-t="space"      onclick="setTheme(this)"><span class="ico">🌍</span>فضاء</button>
+        <button class="theme-btn"        data-t="cabin"      onclick="setTheme(this)"><span class="ico">🏠</span>كابينة</button>
+        <button class="theme-btn"        data-t="autumn_path" onclick="setTheme(this)"><span class="ico">🍂</span>خريف</button>
+        <button class="theme-btn"        data-t="mystical"   onclick="setTheme(this)"><span class="ico">✨</span>سحري</button>
+        <button class="theme-btn"        data-t="rain"       onclick="setTheme(this)"><span class="ico">🌧️</span>مطر</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>لون النص</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:5px">
+        <button class="cpill active" data-v="auto" onclick="setColor(this)"><span class="ico">🎨</span>تلقائي</button>
+        <button class="cpill" data-v="light" onclick="setColor(this)"><span class="ico">☀️</span>فاتح</button>
+        <button class="cpill" data-v="dark"  onclick="setColor(this)"><span class="ico">🌙</span>غامق</button>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div class="badge">📐 <strong>1080×1920</strong> ريلز</div>
+    <div class="badge">🎬 <strong>H.264 MP4</strong></div>
+    <div class="badge">🎥 <strong>فيديوهات طبيعية HD</strong></div>
+    <div class="badge">🔄 <strong>تكرار تلقائي</strong></div>
+    <div class="badge">✨ <strong>Fade تأثيرات</strong></div>
+    <div class="badge">📖 <strong>ترجمة إنجليزية</strong></div>
+  </div>
+</div>
+
+<!-- Card 4: Generate -->
+<div class="card">
+  <div class="ctitle">توليد الفيديو</div>
+
+  <!-- System check bar -->
+  <div class="check-bar">
+    <span id="c-ff"  class="check-item" style="color:var(--dim)">⏳ FFmpeg</span>
+    <span id="c-fn"  class="check-item" style="color:var(--dim)">⏳ الخط</span>
+    <span id="c-ar"  class="check-item" style="color:var(--dim)">⏳ عربي</span>
+    <button onclick="doCheck()" style="margin-right:auto;background:transparent;
+      border:1px solid var(--bdr);border-radius:6px;color:var(--dim);
+      font-size:11px;padding:4px 10px;cursor:pointer;font-family:Cairo,sans-serif">
+      🔄 فحص
+    </button>
+  </div>
+
+  <!-- Arabic install warning -->
+  <div class="ar-warn" id="ar-warn">
+    <span style="color:#e74c3c">⚠️ مكتبة الخط العربي غير مثبتة — النص سيظهر بحروف منفصلة</span>
+    <button id="btn-ar-install" onclick="installArabic()" style="background:var(--gold);
+      border:none;border-radius:7px;color:#000;font-family:Cairo,sans-serif;
+      font-weight:700;font-size:12px;padding:5px 12px;cursor:pointer">
+      ⬇ تثبيت تلقائي
+    </button>
+  </div>
+
+  <!-- FFmpeg guide -->
+  <div id="ff-guide" style="display:none;background:rgba(231,76,60,.08);
+    border:1px solid rgba(231,76,60,.3);border-radius:12px;
+    padding:14px 18px;margin-bottom:14px;font-size:13px;line-height:2">
+    <strong style="color:#e74c3c">⚠️ FFmpeg غير موجود</strong><br>
+    حمّله من <a href="https://github.com/BtbN/FFmpeg-Builds/releases/latest"
+    target="_blank" style="color:var(--gold)">هنا</a>
+    واستخرج <code style="background:var(--surf3);padding:1px 6px;border-radius:4px">ffmpeg.exe</code>
+    و<code style="background:var(--surf3);padding:1px 6px;border-radius:4px">ffprobe.exe</code>
+    إلى مجلد <code style="background:var(--surf3);padding:1px 6px;border-radius:4px">ffmpeg_bin/</code>
+  </div>
+
+  <button id="btn-gen" onclick="doGenerate()">✦ توليد الفيديو ✦</button>
+
+  <div id="prog-wrap">
+    <span id="prog-pct">0%</span>
+    <div class="prog-track"><div id="prog-fill"></div></div>
+    <div id="prog-msg">جاري التحضير...</div>
+  </div>
+
+  <div class="alert ok" id="al-ok"><span>✅</span><span>تم توليد الفيديو بنجاح!</span></div>
+  <div class="alert err" id="al-err"><span>⚠️</span><span id="err-txt">خطأ</span></div>
+  <button id="btn-dl" onclick="doDl()">⬇ تحميل الفيديو MP4</button>
+</div>
+
+<div class="orn">✦ ✦ ✦</div>
+</div>
+
+<script>
+// Smart API detection: works when opened directly OR served by Flask
+// When served by Flask (phone/PC via IP), use same host. 
+// When opened as file, use localhost.
+const _host = window.location.hostname || 'localhost';
+const _port = '5000';
+const API = `http://${_host}:${_port}`;
+let jobId = null, color = 'auto', theme = 'auto', surahData = null;
+
+window.addEventListener('load', () => {
+  loadReciters(); loadSurahs(); doCheck();
+});
+
+// ── Load data ─────────────────────────────────────────────────
+async function loadReciters() {
+  try {
+    const d = await (await fetch(`${API}/api/reciters`)).json();
+    const sel = document.getElementById('sel-reciter');
+    sel.innerHTML = d.reciters.map(r =>
+      `<option value="${r.identifier}">${r.name || r.englishName}</option>`
+    ).join('');
+    const af = [...sel.options].findIndex(o => o.value.includes('alafasy'));
+    if (af >= 0) sel.selectedIndex = af;
+  } catch { document.getElementById('sel-reciter').innerHTML =
+    '<option value="ar.alafasy">مشاري العفاسي</option>'; }
+}
+
+async function loadSurahs() {
+  try {
+    const d = await (await fetch(`${API}/api/surahs`)).json();
+    const sel = document.getElementById('sel-surah');
+    sel.innerHTML = '<option value="">-- اختر السورة --</option>' +
+      d.surahs.map(s =>
+        `<option value="${s.number}" data-n="${s.numberOfAyahs}">
+          ${s.number}. ${s.name} (${s.englishName})
+        </option>`).join('');
+    sel.addEventListener('change', onSurahChange);
+  } catch {}
+}
+
+async function onSurahChange() {
+  const sel = document.getElementById('sel-surah');
+  const opt = sel.options[sel.selectedIndex];
+  if (!opt.value) return;
+  const n = parseInt(opt.dataset.n);
+  const fi = document.getElementById('inp-from');
+  const ti = document.getElementById('inp-to');
+  fi.disabled = ti.disabled = false;
+  fi.max = ti.max = n;
+  fi.value = 1; ti.value = Math.min(3, n);
+  try {
+    const d = await (await fetch(`${API}/api/surah/${opt.value}`)).json();
+    surahData = d;
+    updatePreview();
+    fi.addEventListener('input', updatePreview);
+    ti.addEventListener('input', updatePreview);
+  } catch {}
+}
+
+function updatePreview() {
+  if (!surahData) return;
+  const f = parseInt(document.getElementById('inp-from').value)||1;
+  const t = parseInt(document.getElementById('inp-to').value)||1;
+  const ayahs = surahData.ayahs.filter(a => a.numberInSurah>=f && a.numberInSurah<=t);
+  document.getElementById('ayah-preview').textContent =
+    ayahs.map(a => `﴿ ${a.text} ﴾`).join('\n\n') || '—';
+  document.getElementById('surah-info').textContent =
+    `${surahData.name} — الآيات ${f} إلى ${t}`;
+}
+
+function setTheme(el) {
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active'); theme = el.dataset.t;
+}
+function setColor(el) {
+  document.querySelectorAll('.cpill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active'); color = el.dataset.v;
+}
+
+// ── System check ──────────────────────────────────────────────
+async function doCheck() {
+  const ff = document.getElementById('c-ff');
+  const fn = document.getElementById('c-fn');
+  const ar = document.getElementById('c-ar');
+  [ff,fn,ar].forEach(e => { e.textContent = '⏳ ...'; e.style.color='var(--dim)'; });
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 8000);
+    const d = await (await fetch(`${API}/api/check`, {signal:ctrl.signal})).json();
+    // FFmpeg
+    if (d.ffmpeg?.ok) { ff.textContent='✅ FFmpeg'; ff.style.color='var(--grn)';
+      document.getElementById('ff-guide').style.display='none'; }
+    else { ff.textContent='❌ FFmpeg'; ff.style.color='var(--red)';
+      document.getElementById('ff-guide').style.display='block'; }
+    // Font
+    const fname = (d.font?.path||'').split(/[\\/]/).pop();
+    fn.textContent = d.font?.ok ? `✅ ${fname}` : '⚠️ خط مفقود';
+    fn.style.color = d.font?.ok ? 'var(--grn)' : '#f39c12';
+    // Arabic
+    if (d.arabic?.ok) { ar.textContent='✅ عربي'; ar.style.color='var(--grn)';
+      document.getElementById('ar-warn').style.display='none'; }
+    else { ar.textContent='❌ عربي'; ar.style.color='var(--red)';
+      document.getElementById('ar-warn').style.display='flex'; }
+  } catch(e) {
+    const m = e.name==='AbortError' ? '⏱ timeout' : '⚠️ لا اتصال';
+    [ff,fn,ar].forEach(el => { el.textContent=m; el.style.color='#f39c12'; });
+  }
+}
+
+async function installArabic() {
+  const btn = document.getElementById('btn-ar-install');
+  btn.textContent='⏳ جاري التثبيت...'; btn.disabled=true;
+  try {
+    const d = await (await fetch(`${API}/api/install-arabic`,{method:'POST'})).json();
+    if (d.ok) {
+      document.getElementById('ar-warn').style.display='none';
+      document.getElementById('c-ar').textContent='✅ عربي';
+      document.getElementById('c-ar').style.color='var(--grn)';
+      alert('✅ ' + d.msg + '\n\nأعد تشغيل python backend.py');
+    } else {
+      alert('❌ ' + d.msg);
+      btn.textContent='⬇ تثبيت تلقائي'; btn.disabled=false;
+    }
+  } catch { btn.textContent='⬇ تثبيت تلقائي'; btn.disabled=false; }
+}
+
+// ── Generate ──────────────────────────────────────────────────
+async function doGenerate() {
+  const reciter = document.getElementById('sel-reciter').value;
+  const surah   = document.getElementById('sel-surah').value;
+  const from    = parseInt(document.getElementById('inp-from').value);
+  const to      = parseInt(document.getElementById('inp-to').value);
+  if (!surah)    return showErr('اختر السورة أولاً');
+  if (to < from) return showErr('نطاق الآيات غير صحيح');
+  if (to-from>14) return showErr('الحد الأقصى 15 آية');
+
+  hideAlerts();
+  document.getElementById('btn-gen').disabled = true;
+  document.getElementById('btn-gen').innerHTML = '<span class="spin"></span> جاري التوليد...';
+  document.getElementById('prog-wrap').style.display = 'block';
+  setProgress(0, 'جاري البدء...');
+
+  try {
+    const r = await fetch(`${API}/api/generate`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({reciter,surah,ayahFrom:from,ayahTo:to,
+                             bgTheme:theme,textColor:color})
+    });
+    const d = await r.json();
+    if (!d.job_id) throw new Error('فشل بدء المهمة');
+    jobId = d.job_id;
+    poll();
+  } catch(e) { showErr(e.message); resetBtn(); }
+}
+
+let pollTimer;
+function poll() {
+  clearTimeout(pollTimer);
+  pollTimer = setTimeout(async () => {
+    try {
+      const d = await (await fetch(`${API}/api/status/${jobId}`)).json();
+      setProgress(d.progress, d.message);
+      if (d.status==='done') { setProgress(100,'✅ اكتمل!'); showOk(); }
+      else if (d.status==='error') { showErr(d.message); resetBtn(); }
+      else poll();
+    } catch { showErr('فقدان الاتصال بالخادم'); resetBtn(); }
+  }, 1500);
+}
+
+function setProgress(pct, msg) {
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-pct').textContent  = pct+'%';
+  document.getElementById('prog-msg').textContent  = msg;
+}
+
+function showOk() {
+  document.getElementById('al-ok').style.display = 'flex';
+  document.getElementById('al-err').style.display = 'none';
+  document.getElementById('btn-dl').style.display = 'block';
+  document.getElementById('prog-wrap').style.display = 'none';
+  resetBtn();
+}
+function showErr(msg) {
+  document.getElementById('err-txt').textContent  = msg;
+  document.getElementById('al-err').style.display = 'flex';
+  document.getElementById('al-ok').style.display  = 'none';
+  document.getElementById('btn-dl').style.display = 'none';
+  document.getElementById('prog-wrap').style.display = 'none';
+  resetBtn();
+}
+function hideAlerts() {
+  document.getElementById('al-ok').style.display  = 'none';
+  document.getElementById('al-err').style.display = 'none';
+  document.getElementById('btn-dl').style.display = 'none';
+}
+function resetBtn() {
+  document.getElementById('btn-gen').disabled = false;
+  document.getElementById('btn-gen').innerHTML = '✦ توليد الفيديو ✦';
+}
+function doDl() {
+  if (!jobId) return;
+  const a = document.createElement('a');
+  a.href = `${API}/api/download/${jobId}`;
+  a.download = `quran_reels_${jobId}.mp4`;
+  a.click();
+}
+</script>
+</body>
+</html>
