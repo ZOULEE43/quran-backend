@@ -1,0 +1,14 @@
+[phases.setup]
+nixPkgs = ["python312", "python312Packages.pip", "ffmpeg", "dejavu_fonts", "liberation_ttf"]
+
+[phases.install]
+cmds = [
+  "python3 -m venv --copies /opt/venv",
+  ". /opt/venv/bin/activate && pip install -r requirements.txt"
+]
+
+[start]
+# IMPORTANT: -w 1 (single worker) — jobs are stored in memory.
+# Multiple workers = each worker has its own jobs dict = download fails on wrong worker.
+# Use threads for concurrency instead.
+cmd = "/opt/venv/bin/gunicorn -w 1 --threads 4 -b 0.0.0.0:3000 --timeout 600 --keep-alive 5 backend:app"
